@@ -32,4 +32,6 @@ export type GeneratedReport = {
     sourceSummary: SourceSummary;
   };
   recommendations: string[];
+  markdownPath?: string;
+  jsonPath?: string;
 };

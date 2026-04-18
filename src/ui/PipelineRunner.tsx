@@ -10,6 +10,7 @@ import { buildReport } from '../engine/report/reportBuilder.js'
 import { writeReportFiles } from '../engine/report/reportWriter.js'
 import { calculateScore, getGrade } from '../engine/score/scoreCalculator.js'
 import { explainScore } from '../engine/score/scoreExplainer.js'
+import { loadConfig } from '../engine/config/configLoader.js'
 import type { LocalJSXCommandOnDone } from '../types/command.js'
 import type { ProjectInspection } from '../types/project.js'
 import type { SecurityFinding as EngineSecurityFinding } from '../engine/security/securityTypes.js'
@@ -58,25 +59,21 @@ function adaptSecurityResult(
 }
 
 function adaptScore(
-  score:       number,
+  scoreBreakdown: any,
   grade:       'pass' | 'warn' | 'fail',
   explanation: string[],
   project:     ProjectResult,
-  sast:        SecurityResult,
-  sca:         SecurityResult,
 ): ScoreResult {
+  const score = scoreBreakdown.finalScore
   const status = grade.toUpperCase() as 'PASS' | 'WARN' | 'FAIL'
   const letter = score >= 90 ? 'A' : score >= 75 ? 'B' : score >= 60 ? 'C' : score >= 40 ? 'D' : 'F'
 
-  const allFindings = [...sast.findings, ...sca.findings]
-  const high   = allFindings.filter(f => f.severity === 'high').length
-  const medium = allFindings.filter(f => f.severity === 'medium').length
-
-  const penalties: ScorePenalty[] = []
-  if (high > 0)   penalties.push({ reason: 'high_severity',   label: `High severity (×${high})`,   points: -(high * 15) })
-  if (medium > 0) penalties.push({ reason: 'medium_severity', label: `Medium severity (×${medium})`, points: -(medium * 5) })
-  if (!project.hasCI)    penalties.push({ reason: 'missing_ci',    label: 'CI missing',    points: -8  })
-  if (!project.hasTests) penalties.push({ reason: 'missing_tests', label: 'Tests missing', points: -10 })
+  // Mapeamos las penalidades reales del breakdown
+  const penalties: ScorePenalty[] = scoreBreakdown.lines.map((l: any) => ({
+    reason: l.reason,
+    label: l.label,
+    points: l.points
+  }))
 
   const suggestions = explanation.slice(0, 5)
 
@@ -100,6 +97,7 @@ async function runAudit(
   onDone:   LocalJSXCommandOnDone,
 ): Promise<void> {
 
+  const { config } = loadConfig(cwd)
   let t = Date.now()
 
   // ── Phase 1: Project ────────────────────────────────────────────────────────
@@ -197,10 +195,10 @@ async function runAudit(
   }
 
   // ── Score final ─────────────────────────────────────────────────────────────
-  const rawScore   = calculateScore(rawFindings, rawProject)
-  const rawGrade   = getGrade(rawScore.finalScore)
-  const rawExplain = explainScore(rawFindings, rawProject)
-  const score      = adaptScore(rawScore.finalScore, rawGrade, rawExplain, project, sast, sca)
+  const scoreBreakdown = calculateScore(rawFindings, rawProject, config)
+  const rawGrade   = getGrade(scoreBreakdown.finalScore, config)
+  const rawExplain = explainScore(scoreBreakdown)
+  const score      = adaptScore(scoreBreakdown, rawGrade, rawExplain, project)
 
   const resultV2: PipelineResultV2 = { project, sast, sca, report, score }
 
