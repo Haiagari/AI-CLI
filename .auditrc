@@ -1,0 +1,13 @@
+{
+  "penalties": {
+    "medium": 8
+  },
+  "ignore": {
+    "packages": [
+      "@hono/node-server",
+      "hono",
+      "follow-redirects",
+      "pytest"
+    ]
+  }
+}
