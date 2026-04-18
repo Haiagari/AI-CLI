@@ -1,12 +1,37 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+coverage/
+
+# TypeScript
 *.tsbuildinfo
+
+# Environment
 .env
 .env.*
 !.env.example
+
+# Local configs
 .openclaude-profile.json
+.claude/
+
+# Reports
 reports/
-GEMINI.md
+
+# Package managers
 package-lock.json
-/.claude
-coverage/
+
+# Temp / logs
+*.log
+*.tmp
+*.swp
+test-phase-*.ts
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
