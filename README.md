@@ -1,244 +1,107 @@
-# OzyAudit
+# ▲ OzyAudit
 
-> Local-first audit terminal for project analysis, security scanning, and explainable scoring.
-
-OzyAudit is a local-first CLI designed to inspect software projects, run security scans, generate technical reports, and produce an explainable health score.
-
-It evolved into a modular audit platform with:
-
-- structural project analysis
-- SAST scanning with Semgrep
-- SCA scanning with Trivy
-- Markdown and JSON reporting
-- automated local pipeline execution
-- deterministic and explainable scoring
+**Local-first technical audit system.** 
+Inspect projects, run security scans, and generate explainable engineering scores.
 
 ---
 
-## Features
+## ✦ Overview
 
-- **Project Analysis**
-  - detects project type
-  - inspects key files and directories
-  - validates basic project structure
+OzyAudit is a professional CLI designed to provide immediate feedback on project health. It automates structural analysis, security scanning (SAST/SCA), and reporting into a single, deterministic pipeline.
 
-- **Security Scanning**
-  - **Semgrep** for code/security patterns (SAST)
-  - **Trivy** for dependency and filesystem vulnerabilities (SCA)
-
-- **Technical Reporting**
-  - generates professional **Markdown** reports
-  - exports machine-readable **JSON** reports
-
-- **Pipeline Execution**
-  - runs a complete local audit flow
-  - produces a final score and status:
-    - PASS
-    - WARN
-    - FAIL
-
-- **Explainable Scoring**
-  - no black box logic
-  - every penalty is traceable and understandable
+- **Project Analysis**: Automatic detection of stack, tests, CI, and Docker structure.
+- **Security Scanning**: Integrated SAST with **Semgrep** and SCA with **Trivy**.
+- **Modern UI**: High-feedback Ink-native interface with real-time step tracking.
+- **Deterministic Scoring**: Transparent rules with no black-box logic.
+- **CI/CD Ready**: Native JSON output and standardized exit codes for automation.
 
 ---
 
-## Architecture
+## 🚀 Quick Start
 
-OzyAudit is organized as a modular CLI platform:
-
-```text
-src/
-  commands/         # thin CLI commands
-  engine/
-    project/        # project analysis
-    security/       # Semgrep + Trivy integration
-    report/         # report building and export
-    pipeline/       # orchestration
-    score/          # deterministic scoring
-```
-
-### Design principles
-
-* thin commands
-* reusable engines
-* deterministic outputs
-* graceful degradation when tools are missing
-* local-first execution
-
----
-
-## Main Commands
-
-### Analyze project
-
-```bash
-/analyze-project
-```
-
-Detects project type, package manager, key files, and basic structural findings.
-
-### Scan security
-
-```bash
-/scan-security
-```
-
-Runs security analysis using available engines:
-
-* Semgrep
-* Trivy
-
-### Generate report
-
-```bash
-/generate-report
-```
-
-Creates:
-
-* Markdown report
-* JSON report
-
-### Run full pipeline
-
-```bash
-/run-pipeline
-```
-
-Executes the complete audit flow and returns:
-
-* score
-* grade
-* explanation
-* report artifacts
-
----
-
-## Example Output
-
-```text
-Pipeline Execution Report
--------------------------
-Score: 72 / 100
-Status: WARN
-
-Project:
-- Type: node
-- Tests: ✅
-- CI: ❌
-- Docker: ✅
-
-Security:
-- Findings: 2
-- High: 1
-- Medium: 1
-
-Explanation:
-- High severity issues (1) contributed major penalties.
-- Medium vulnerabilities (1) contributed moderate penalties.
-- No CI pipeline detected, impacting continuous validation score (-8).
-```
-
----
-
-## Reports
-
-Generated reports are stored in:
-
-```text
-reports/
-```
-
-Formats:
-
-* `audit-report-YYYY-MM-DD_HH-MM-SS.md`
-* `audit-report-YYYY-MM-DD_HH-MM-SS.json`
-
----
-
-## Requirements
-
-* Bun
-* Node.js
-* ripgrep
-* git
-
-Optional but recommended:
-
-* Semgrep
-* Trivy
-
----
-
-## Install Dependencies
-
-### Core
+### Installation
 
 ```bash
 bun install
 ```
 
-### Semgrep
+*Ensure you have `semgrep` and `trivy` installed in your path for full security scanning capabilities.*
 
-Install from the official Semgrep documentation.
+### Usage
 
-### Trivy
-
-Install from the official Trivy documentation.
-
----
-
-## Development
-
-Build:
+Run the full audit pipeline on your current directory:
 
 ```bash
-bun run build
-```
-
-Run:
-
-```bash
-bun run dev
+/run-pipeline
 ```
 
 ---
 
-## Project Vision
+## ⚙️ Configuration (`.auditrc`)
 
-OzyAudit is not just a CLI wrapper.
+OzyAudit is highly configurable via an `.auditrc` JSON file in your project root.
 
-It is a **local-first technical audit system** designed to:
+```json
+{
+  "thresholds": {
+    "pass": 85,
+    "warn": 65
+  },
+  "penalties": {
+    "medium": 5,
+    "missing_ci": 10
+  },
+  "ignore": {
+    "packages": ["hono"],
+    "rules": ["hardcoded-secret"]
+  }
+}
+```
 
-* inspect software projects
-* detect structural weaknesses
-* identify security issues
-* generate professional audit artifacts
-* provide an explainable engineering score
-
----
-
-## Current Scope
-
-Implemented:
-
-* project analysis
-* Semgrep integration
-* Trivy integration
-* reporting engine
-* unified pipeline
-* deterministic score engine
-
-Planned next phases:
-
-* configurable scoring via `.auditrc`
-* severity filters
-* CI integration
-* richer report views
+- **Thresholds**: Define custom score limits for PASS/WARN status.
+- **Penalties**: Calibrate how much each finding severity or structural gap impacts the score.
+- **Ignore**: Skip specific packages, security rules, or entire severity levels.
 
 ---
 
-## License
+## 🤖 CI/CD Integration
 
-MIT
+OzyAudit is designed to fail your pipeline if the score doesn't meet your standards.
+
+```bash
+# Clean JSON output for automation
+/run-pipeline --ci
+```
+
+**Exit Codes:**
+- `0`: PASS
+- `1`: WARN
+- `2`: FAIL
+
+---
+
+## 🏗️ Architecture
+
+Modular design with decoupled engines and a headless-ready UI.
+
+```text
+src/
+├── engine/         # Pure logic: Project, Security, Report, Score
+├── ui/             # Ink-native React components
+└── commands/       # CLI command entrypoints
+```
+
+---
+
+## 🛠️ Development
+
+```bash
+bun run build  # Compile and bundle
+bun run dev    # Build and start interactive session
+```
+
+---
+
+## 📄 License
+
+MIT · Open source and local-first.
