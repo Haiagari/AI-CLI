@@ -1,69 +1,82 @@
 # Security Policy
 
-## Supported Versions
-
-Open Claude is currently maintained on the latest `main` branch and the latest
-npm release only.
-
-| Version | Supported |
-| ------- | --------- |
-| Latest release | :white_check_mark: |
-| Older releases | :x: |
-| Unreleased forks / modified builds | :x: |
-
-Security fixes are generally released in the next patch version and may also be
-landed directly on `main` before a package release is published.
-
 ## Reporting a Vulnerability
 
-If you believe you have found a security vulnerability in Open Claude, please
-report it privately.
+If you discover a security vulnerability in OzyAudit, please **do not** open a public GitHub issue.
 
-Preferred reporting channel:
+Instead, please report it privately by:
 
-- GitHub Security Advisories / private vulnerability reporting for this
-  repository
+1. **Email**: Contact the maintainer directly
+2. **GitHub Security Advisory**: Use the "Report a security vulnerability" feature in the Security tab
 
-Please include:
+### What to include:
 
-- a clear description of the issue
-- affected version, commit, or environment
-- reproduction steps or a proof of concept
-- impact assessment
-- any suggested remediation, if available
+- Description of the vulnerability
+- Steps to reproduce (if applicable)
+- Potential impact
+- Suggested fix (if you have one)
 
-Please do **not** open a public issue for an unpatched vulnerability.
+### Response Timeline:
 
-## Response Process
+We aim to:
+- Acknowledge receipt within 48 hours
+- Provide an initial assessment within 7 days
+- Release a fix as soon as possible
 
-Our general goals are:
+## Security Best Practices
 
-- initial triage acknowledgment within 7 days
-- follow-up after validation when we can reproduce the issue
-- coordinated disclosure after a fix is available
+When using OzyAudit:
 
-Severity, exploitability, and maintenance bandwidth may affect timelines.
+### Credentials & Secrets
 
-## Disclosure and CVEs
+- **Never commit credentials** to the repository
+- Use `.env` files (listed in `.gitignore`)
+- Use environment variables for sensitive data
+- Rotate API keys and tokens regularly
+- Use GitHub Secrets for CI/CD pipelines
 
-Valid reports may be fixed privately first and disclosed after a patch is
-available.
+### Scanning Tools
 
-If a report is accepted and the issue is significant enough to warrant formal
-tracking, we may publish a GitHub Security Advisory and request or assign a CVE
-through the appropriate channel. CVE issuance is not guaranteed for every
-report.
+- Keep **Semgrep** and **Trivy** updated regularly
+- Review scan results carefully before ignoring findings
+- Do not disable security checks in production
 
-## Scope
+### Access Control
 
-This policy applies to:
+- Limit repository access to trusted collaborators
+- Use branch protection rules (required before merging)
+- Require code reviews for all PRs
+- Require signed commits
 
-- the Open Claude source code in this repository
-- official release artifacts published from this repository
-- the `@gitlawb/openclaude` npm package
+## Dependency Security
 
-This policy does not cover:
+OzyAudit uses several external tools:
 
-- third-party model providers, endpoints, or hosted services
-- local misconfiguration on the reporter's machine
-- vulnerabilities in unofficial forks, mirrors, or downstream repackages
+- **Semgrep** - SAST scanning
+- **Trivy** - SCA and filesystem vulnerability scanning
+- **ripgrep** - Fast file searching
+- **git** - Version control
+
+We regularly:
+- Update dependencies via Dependabot
+- Monitor security advisories
+- Test compatibility with latest versions
+
+## Secure Development Practices
+
+1. **Code Review**: All changes require peer review
+2. **Signed Commits**: Commits should be signed with GPG
+3. **Testing**: Run tests before submitting PRs
+4. **No Hardcoded Secrets**: Configuration should be external
+
+## Security Features
+
+- ✅ Local-first execution (no data sent externally unless configured)
+- ✅ Deterministic and explainable scoring
+- ✅ Open-source for transparency
+- ✅ Dependency scanning built-in
+- ✅ Code pattern scanning with Semgrep
+
+## Contact
+
+For security questions or concerns, please contact the maintainer privately.
