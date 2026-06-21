@@ -1,215 +1,156 @@
-# ▲ OzyAudit
+# ▲ OpenClaude
 
-> **Local-first audit platform for software projects.**
-> Scan. Score. Explain. Ship with confidence.
+> **Claude Code opened to any LLM — OpenAI, Gemini, DeepSeek, Ollama, and more.**
+> Same CLI. Your choice of provider.
 
 ```
-  ▲ OzyAudit  v0.2.0
+  ▲ OpenClaude  v0.4.0
 
-  ✔ Project detected — node · 47 files · tests ✅ · CI ✅   (1.2s)
-  ✔ SAST completed — 0 high · 1 medium · 2 low              (3.4s)
-  ✔ SCA completed — 0 critical · 2 medium · 0 low           (2.1s)
-  ✔ Report saved → reports/audit-2025-04-18_10-30.md        (0.3s)
+  Welcome! Choose a provider to get started:
 
-  ┌──────────────────────────────────────────┐
-  │  Score    91 / 100       Grade  A        │
-  │  Status   ✅  PASS                       │
-  ├──────────────────────────────────────────┤
-  │  Project  node                           │
-  │  Tests    ✅  present                    │
-  │  CI       ✅  present                    │
-  │  Docker   ✅  present                    │
-  ├──────────────────────────────────────────┤
-  │  High     0              —               │
-  │  Medium   3              -6 pts          │
-  │  Low      2              —               │
-  └──────────────────────────────────────────┘
+    ● Anthropic  (Claude Sonnet, Opus)
+    ○ OpenAI     (GPT-4o, o3, Codex)
+    ○ Gemini     (Gemini 2.5 Pro, Flash)
+    ○ Ollama     (local models — qwen2.5-coder, llama3.2)
+    ○ DeepSeek   (DeepSeek-V3, DeepSeek-R1)
+    ○ GitHub     (via Copilot API)
+    ○ Bedrock    (AWS)
+    ○ Vertex     (GCP)
+    ○ NVIDIA NIM, MiniMax, Mistral
 
-  ✦ Next steps:
-    → Update follow-redirects to 1.16.0 (CVE fix available)
-    → Review medium finding in src/auth/middleware.ts:88
-
-  ◇ Full report → reports/audit-2025-04-18_10-30.md
+  Run: bun run dev:profile    → interactive setup wizard
+       bun run dev:ollama     → quick start with local Ollama
+       bun run dev:openai     → quick start with OpenAI
 ```
 
 ---
 
-## What is OzyAudit?
+## What is OpenClaude?
 
-OzyAudit is a **local-first CLI audit platform** that inspects your codebase, runs security scans, and produces an explainable health score — no cloud, no black box, no surprises.
+OpenClaude is a **fork of Claude Code that adds multi-provider support**. It keeps the same interactive terminal UI, tool system, and agent architecture — but routes API calls to the provider you choose instead of being locked to Anthropic.
 
-It runs entirely on your machine. Every penalty is traceable. Every score is reproducible. And it fits naturally into both your terminal workflow and your CI/CD pipeline.
+The base codebase is derived from Anthropic's Claude Code (proprietary). Modifications and additions by OpenClaude contributors are offered under the MIT License where legally permissible.
 
 ---
 
-## Why OzyAudit?
+## Why OpenClaude?
 
-Most audit tools give you a number. OzyAudit tells you **why** the number is what it is — and exactly what to do about it.
-
-| Other tools | OzyAudit |
+| Claude Code (original) | OpenClaude |
 |---|---|
-| Cloud-dependent | Runs 100% locally |
-| Opaque scoring | Every penalty is named and documented |
-| Static rules | Configurable via `.auditrc` |
-| CI-hostile output | Native `--ci` mode with clean JSON + exit codes |
-| Generic reports | Markdown reports optimized for GitHub/GitLab rendering |
+| Anthropic API only | 10+ providers natively supported |
+| Single provider | Switch providers anytime via profiles |
+| — | Run local models for free with Ollama |
+| — | Any OpenAI-compatible endpoint works |
 
 ---
 
 ## Features
 
-### Project Analysis
-Detects project type, package manager, key structural files, and validates your setup before scanning anything.
+### Multi-Provider Support
 
-```
-/analyze-project
-```
+Connect to LLMs through a unified interface. Providers are selected via environment variables or interactive profiles:
 
-Inspects: project type · package manager · test coverage · CI config · Docker setup · environment docs
-
-### Security Scanning
-
-Two engines, zero black boxes.
-
-```
-/scan-security
-```
-
-**SAST via Semgrep** — scans code patterns, secret exposure, injection risks, and security anti-patterns in your source files.
-
-**SCA via Trivy** — scans your dependency tree for known CVEs, outdated packages, and vulnerable lockfiles.
-
-Both engines degrade gracefully — if a tool isn't installed, the scan is skipped cleanly with a clear message rather than crashing.
-
-### Explainable Scoring
-
-The score isn't magic. It's math you can read.
-
-```
-Base score:   100
-High (×1):    -20
-Medium (×3):   -6  (configured: 2 pts each via .auditrc)
-Missing CI:    -8
-──────────────────
-Final score:   66 / 100 → WARN
-```
-
-Every penalty has a reason, a label, and a point value. No surprises, no mystery.
-
-### Professional Reports
-
-```
-/generate-report
-```
-
-Generates two artifacts every run:
-
-- `audit-report-YYYY-MM-DD_HH-MM-SS.md` — rendered beautifully on GitHub/GitLab with badges, collapsible findings, and a score breakdown table
-- `audit-report-YYYY-MM-DD_HH-MM-SS.json` — machine-readable output for dashboards, custom tooling, or downstream automation
-
-Reports are stored in `reports/` and never overwritten.
-
-### Full Pipeline
-
-```
-/run-pipeline
-```
-
-Runs everything in sequence: analysis → SAST → SCA → report → score. One command, full picture.
-
----
-
-## CI/CD Integration
-
-OzyAudit speaks CI natively.
+- **Anthropic** — Claude Sonnet, Opus, custom endpoints
+- **OpenAI** — GPT-4o, o3, Codex (with separate auth flow)
+- **Google Gemini** — Gemini 2.5 Pro, Flash
+- **Ollama** — any local model (qwen2.5-coder, llama3.2, etc.)
+- **DeepSeek** — DeepSeek-V3, DeepSeek-R1
+- **GitHub Copilot** — via Copilot API (GPT-4o and others)
+- **AWS Bedrock** and **GCP Vertex** — enterprise cloud providers
+- **NVIDIA NIM**, **MiniMax**, **Mistral** — additional providers
+- **Any OpenAI-compatible endpoint** — DashScope, OpenRouter, Groq, Fireworks, LM Studio, etc.
 
 ```bash
-# In your GitHub Actions or GitLab CI:
-ozyaudit run-pipeline --ci
+bun run dev:profile    # interactive provider selection
+bun run dev:ollama     # quick start with local Ollama
+bun run dev:openai     # quick start with OpenAI
+bun run dev:gemini     # quick start with Gemini
+bun run dev:codex      # quick start with OpenAI Codex
 ```
 
-In `--ci` mode:
-- All UI animations and color output are disabled
-- The full result is printed as clean JSON to `stdout`
-- Logs and warnings go to `stderr` — no contamination
-- The process exits with a meaningful code:
+### Provider Profiles
 
-| Status | Exit code |
-|--------|-----------|
-| PASS   | `0`       |
-| WARN   | `1`       |
-| FAIL   | `2`       |
+Save and switch between provider configurations stored in `.openclaude-profile.json`:
 
-```yaml
-# .github/workflows/audit.yml
-- name: OzyAudit
-  run: ozyaudit run-pipeline --ci
-  # Pipeline fails automatically if score < thresholds
+```bash
+bun run profile:init      # create a new profile
+bun run profile:auto      # auto-recommend best provider for your system
+bun run profile:fast      # lightweight profile (llama3.2:3b via Ollama)
+bun run profile:code      # code-specialized profile (qwen2.5-coder:7b)
 ```
 
----
+### Claude Code Feature Set
 
-## Configurable Scoring — `.auditrc`
+Inherits the core Claude Code experience:
 
-Drop a `.auditrc` file in your project root to tune the scoring engine for your team's standards.
+- **Interactive TUI** — React/Ink-based terminal interface with live output
+- **Tool system** — Bash, Read, Write, Edit, Glob, Grep, and more
+- **MCP server support** — connect to external Model Context Protocol servers
+- **Skills & Plugins** — extensible skill system with bundled and custom skills
+- **Session management** — resume conversations, session history
+- **Git integration** — branch awareness, worktree support
+- **Permission system** — granular tool permissions, auto-mode controls
+- **gRPC server** — headless mode for external agent integration (port 50051)
+- **Coordinator mode** — multi-agent orchestration
 
-```json
-{
-  "thresholds": {
-    "pass": 80,
-    "warn": 50
-  },
-  "penalties": {
-    "critical": 40,
-    "high": 20,
-    "medium": 8,
-    "low": 3,
-    "missing_tests": 10,
-    "missing_ci": 8,
-    "missing_gitignore": 10,
-    "missing_env_example": 3
-  },
-  "ignore": {
-    "packages": ["some-legacy-dep"],
-    "rules": ["rule-id-under-review"],
-    "severities": []
-  }
-}
+### VS Code Extension
+
+A companion VS Code extension provides a chat interface. See `vscode-extension/openclaude-vscode/`.
+
+### Docker
+
+```bash
+docker build -t openclaude .
+docker run -it openclaude
 ```
 
-All fields are optional. Missing fields fall back to defaults. The schema is validated with Zod on every run — if your `.auditrc` has an invalid field, OzyAudit tells you exactly which one and continues with sane defaults.
-
-> **Note:** `.auditrc` is intentionally `.gitignore`'d. Each project or team keeps their own. Copy `.auditrc.example` to get started.
+Images are published to GHCR on release.
 
 ---
 
 ## Architecture
 
-OzyAudit is organized around a strict separation between commands, engines, and UI. Nothing in `engine/` knows the UI exists. Nothing in `ui/` knows how scores are calculated.
+OpenClaude adds a provider abstraction layer on top of the Claude Code codebase:
 
 ```
 src/
-  commands/           # thin entry points — one file per command
-  engine/
-    config/           # .auditrc loading and validation (Zod)
-    project/          # structural analysis
-    security/         # Semgrep + Trivy integration
-    report/           # Markdown + JSON report generation
-    pipeline/         # orchestration and contracts
-    score/            # deterministic scoring engine
-  ui/
-    components/       # StepRow, SummaryTable (Ink-native)
-    PipelineRunner    # React orchestrator — drives the live UI
-    theme             # design tokens (respects dark/light mode)
+  services/api/          # Provider adapters (~3800 lines of provider code)
+    client.ts            # Main API client (Anthropic SDK + routing)
+    claude.ts            # Anthropic direct adapter
+    openaiShim.ts        # OpenAI-compatible shim (1862 lines)
+    providerConfig.ts    # Credential resolution (805 lines)
+    codexShim.ts         # OpenAI Codex transport
+  utils/
+    providerProfile.ts   # Profile save/load (934 lines)
+    providerDiscovery.ts # Auto-detect local providers
+    providerValidation.ts
+    model/
+      providers.ts       # Provider routing by env vars
+  grpc/
+    server.ts            # gRPC server for external agents
+  vscode-extension/      # VS Code chat extension
+  tools/                 # Tool definitions
+  skills/                # Skill system
+  services/mcp/          # MCP client/server
+  coordinator/           # Multi-agent orchestration
+  ui/                    # Ink/React terminal UI
+  commands/              # CLI subcommands
 ```
 
-**Design principles:**
+**How provider routing works:**
 
-- **Thin commands.** Commands call engines. They don't contain logic.
-- **Reusable engines.** Each engine can be called independently or composed.
-- **Deterministic outputs.** Same input → same score, always.
-- **Graceful degradation.** Missing tools produce `skipped` steps, not crashes.
-- **Local-first.** Nothing phones home. No telemetry. No accounts.
+Environment variables control which provider is active:
+- `CLAUDE_CODE_USE_OPENAI=1` → OpenAI / Codex / any OpenAI-compatible
+- `CLAUDE_CODE_USE_GEMINI=1` → Google Gemini
+- `CLAUDE_CODE_USE_GITHUB=1` → GitHub Copilot API
+- `CLAUDE_CODE_USE_BEDROCK=1` → AWS Bedrock
+- `CLAUDE_CODE_USE_VERTEX=1` → GCP Vertex
+- `CLAUDE_CODE_USE_MISTRAL=1` → Mistral
+- `NVIDIA_NIM=1` → NVIDIA NIM
+- `MINIMAX_API_KEY` set → MiniMax
+- None set → Anthropic (default)
+
+The `openaiShim.ts` translates Anthropic SDK calls into OpenAI-compatible HTTP requests, so the rest of the codebase doesn't need to know which provider is running.
 
 ---
 
@@ -218,16 +159,18 @@ src/
 **Core:**
 
 - [Bun](https://bun.sh) — runtime and package manager
-- Node.js — required by some internal dependencies
-- `ripgrep` — fast file search used by the analysis engine
-- `git` — for repository context
+- Node.js >= 20.0.0
 
-**Security scanning (optional but strongly recommended):**
+**Provider-specific:**
 
-- [Semgrep](https://semgrep.dev/docs/getting-started/) — SAST engine
-- [Trivy](https://aquasecurity.github.io/trivy/latest/getting-started/installation/) — SCA engine
+- **Ollama** — for local model inference
+- **API keys** — for cloud providers (set via profiles or env vars)
 
-If either tool is missing, OzyAudit logs a clean warning and continues. You get a partial score instead of a crash.
+**Optional:**
+
+- `ripgrep` — fast file search
+- `git` — repository context
+- Docker — containerized execution
 
 ---
 
@@ -240,7 +183,25 @@ bun install
 # Build
 bun run build
 
-# Run
+# Run interactive session
+bun run dev
+
+# Run with a specific provider
+bun run dev:ollama
+bun run dev:openai
+bun run dev:gemini
+```
+
+### Quick Start
+
+```bash
+# 1. Install and build
+bun install && bun run build
+
+# 2. Auto-recommend and configure a provider
+bun run profile:auto
+
+# 3. Launch
 bun run dev
 ```
 
@@ -249,37 +210,34 @@ bun run dev
 ## Development
 
 ```bash
-bun run build     # compile to dist/cli.mjs
-bun run dev       # run in watch mode
+bun run build          # compile to dist/cli.mjs
+bun run dev            # run in watch mode
+bun run dev:profile    # interactive provider launcher
+bun run typecheck      # TypeScript type checking
+bun test               # run test suite
+bun run test:coverage  # run with coverage report
 ```
+
+### Smoke Test
 
 ```bash
-# Quick smoke test (CI mode — no UI, pure JSON output)
-node dist/cli.mjs -p "/run-pipeline --ci" | jq .score
+bun run build && node dist/cli.mjs --version
 ```
 
----
+### Verify No Phone-Home
 
-## Roadmap
-
-OzyAudit is actively developed. What's coming:
-
-| Version | Focus |
-|---|---|
-| **v0.2.0** | ✅ Ink-native UI · live spinners · CI mode · `.auditrc` scoring |
-| **v0.3.0** | Report badges · collapsible findings · GitHub-optimized Markdown |
-| **v0.3.1** | YAML support for `.auditrc` |
-| **v0.4.0** | `ozyaudit init` — interactive setup wizard |
-| **v0.5.0** | Severity filters · per-file ignore rules |
+```bash
+bun run verify:privacy
+```
 
 ---
 
 ## License
 
-MIT — do whatever you want with it.
+Derived from Anthropic's Claude Code (proprietary). Modifications by OpenClaude contributors are offered under the MIT License where legally permissible. See LICENSE file.
 
 ---
 
 <p align="center">
-  Built local-first. Scored deterministically. No black boxes.
+  Built on Claude Code. Open to every provider.
 </p>

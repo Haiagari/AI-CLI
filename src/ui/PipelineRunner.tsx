@@ -205,7 +205,7 @@ async function runAudit(
   setState(s => ({ ...s, result: resultV2 }))
 
   onDone(
-    `OzyAudit complete — Score: ${score.score}/100 (${score.grade}) · Status: ${score.status}`,
+    `Audit complete — Score: ${score.score}/100 (${score.grade}) · Status: ${score.status}`,
     { shouldQuery: false }
   )
 }
@@ -229,11 +229,11 @@ export function PipelineRunner({ cwd, onDone }: PipelineRunnerProps) {
       <Box flexDirection="column" marginBottom={1}>
         <Text>{' '}</Text>
         <Box gap={2} paddingLeft={2}>
-          <Text bold>{`${icons.brand} OzyAudit`}</Text>
-          <Text color="secondary">v0.2.0</Text>
+          <Text bold>{`${icons.brand} Project Audit`}</Text>
+          <Text color="secondary">v0.4.0</Text>
         </Box>
         <Box paddingLeft={2}>
-          <Text color="secondary">Local-first audit platform</Text>
+          <Text color="secondary">Analyze · Scan · Score</Text>
         </Box>
         <Text>{' '}</Text>
       </Box>
