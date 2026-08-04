@@ -1,6 +1,6 @@
-# Contributing to OzyAudit
+# Contributing to OpenClaude
 
-Thank you for your interest in contributing to OzyAudit! This document provides guidelines for contributing to the project.
+Thank you for contributing to OpenClaude. This document covers the practical path for proposing and validating changes.
 
 ## Code of Conduct
 
@@ -36,9 +36,8 @@ Thank you for your interest in contributing to OzyAudit! This document provides 
 
 ### Code Style
 
-- Use TypeScript for all code
-- Follow ESLint configuration
-- Format with Prettier (if configured)
+- Use TypeScript for TypeScript code
+- Follow existing project conventions
 - Write meaningful commit messages
 
 ### Commit Messages
@@ -60,8 +59,10 @@ Before submitting:
 ```bash
 bun install
 bun run build
-bun run test
-bun run lint
+bun run typecheck
+bun test
+bun run smoke
+bun run verify:privacy
 ```
 
 ### Documentation
@@ -78,12 +79,12 @@ Update docs when:
 2. **Install dependencies**: `bun install`
 3. **Build**: `bun run build`
 4. **Run**: `bun run dev`
-5. **Test**: `bun run test`
+5. **Test**: `bun test`
 
 ## Architecture Notes
 
 - **Commands** (`src/commands/`) - Thin CLI wrappers
-- **Engine** (`src/engine/`) - Core business logic
+- **Engine** (`src/engine/`) - Local project analysis, security checks, reporting, and scoring
   - `project/` - Project analysis
   - `security/` - Semgrep and Trivy integration
   - `report/` - Report generation
