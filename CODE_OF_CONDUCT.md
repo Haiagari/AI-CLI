@@ -2,7 +2,7 @@
 
 ## Our Commitment
 
-OzyAudit is committed to providing a welcoming, inclusive, and harassment-free community for everyone, regardless of age, body size, disability, ethnicity, gender identity, experience level, nationality, personal appearance, race, religion, or sexual identity and orientation.
+OpenClaude is committed to providing a welcoming, inclusive, and harassment-free community for everyone, regardless of age, body size, disability, ethnicity, gender identity, experience level, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 ## Our Standards
 

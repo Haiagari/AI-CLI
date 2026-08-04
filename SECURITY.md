@@ -2,12 +2,9 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in OzyAudit, please **do not** open a public GitHub issue.
+If you discover a security vulnerability in OpenClaude, please **do not** open a public GitHub issue.
 
-Instead, please report it privately by:
-
-1. **Email**: Contact the maintainer directly
-2. **GitHub Security Advisory**: Use the "Report a security vulnerability" feature in the Security tab
+Please report it privately using GitHub's **Report a security vulnerability** feature in the repository's Security tab.
 
 ### What to include:
 
@@ -16,16 +13,9 @@ Instead, please report it privately by:
 - Potential impact
 - Suggested fix (if you have one)
 
-### Response Timeline:
-
-We aim to:
-- Acknowledge receipt within 48 hours
-- Provide an initial assessment within 7 days
-- Release a fix as soon as possible
-
 ## Security Best Practices
 
-When using OzyAudit:
+When using OpenClaude:
 
 ### Credentials & Secrets
 
@@ -44,39 +34,23 @@ When using OzyAudit:
 ### Access Control
 
 - Limit repository access to trusted collaborators
-- Use branch protection rules (required before merging)
-- Require code reviews for all PRs
-- Require signed commits
-
 ## Dependency Security
 
-OzyAudit uses several external tools:
+OpenClaude can use several external tools:
 
 - **Semgrep** - SAST scanning
 - **Trivy** - SCA and filesystem vulnerability scanning
 - **ripgrep** - Fast file searching
 - **git** - Version control
 
-We regularly:
-- Update dependencies via Dependabot
-- Monitor security advisories
-- Test compatibility with latest versions
-
 ## Secure Development Practices
 
-1. **Code Review**: All changes require peer review
-2. **Signed Commits**: Commits should be signed with GPG
-3. **Testing**: Run tests before submitting PRs
-4. **No Hardcoded Secrets**: Configuration should be external
+1. **Code Review**: Changes should receive peer review
+2. **Testing**: Run tests before submitting PRs
+3. **No Hardcoded Secrets**: Configuration should be external
 
-## Security Features
+## Security Considerations
 
-- ✅ Local-first execution (no data sent externally unless configured)
-- ✅ Deterministic and explainable scoring
-- ✅ Open-source for transparency
-- ✅ Dependency scanning built-in
-- ✅ Code pattern scanning with Semgrep
-
-## Contact
-
-For security questions or concerns, please contact the maintainer privately.
+- OpenClaude includes a privacy verification command: `bun run verify:privacy`.
+- The optional security pipeline uses Semgrep for code scanning and Trivy for dependency and filesystem scanning when those tools are installed.
+- Review scanner results and configuration before relying on them for a particular project.

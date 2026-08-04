@@ -1,7 +1,7 @@
 # ▲ OpenClaude
 
-> **Claude Code opened to any LLM — OpenAI, Gemini, DeepSeek, Ollama, and more.**
-> Same CLI. Your choice of provider.
+> **A multi-provider terminal coding assistant built on the Claude Code experience.**
+> Use Anthropic, OpenAI-compatible services, Gemini, local Ollama models, and more.
 
 ```
   ▲ OpenClaude  v0.4.0
@@ -27,7 +27,7 @@
 
 ## What is OpenClaude?
 
-OpenClaude is a **fork of Claude Code that adds multi-provider support**. It keeps the same interactive terminal UI, tool system, and agent architecture — but routes API calls to the provider you choose instead of being locked to Anthropic.
+OpenClaude is a **fork of Claude Code that adds multi-provider support**. It keeps the interactive terminal UI, tool system, and agent workflow while letting you choose the provider that handles model requests.
 
 The base codebase is derived from Anthropic's Claude Code (proprietary). Modifications and additions by OpenClaude contributors are offered under the MIT License where legally permissible.
 
@@ -96,6 +96,16 @@ Inherits the core Claude Code experience:
 ### VS Code Extension
 
 A companion VS Code extension provides a chat interface. See `vscode-extension/openclaude-vscode/`.
+
+### Optional Project Analysis and Security Pipeline
+
+OpenClaude also includes local commands for project analysis and security checks:
+
+- `/analyze-project` inspects the current project structure.
+- `/scan-security` runs the available Semgrep and Trivy checks.
+- `/run-pipeline` combines project analysis, security checks, scoring, and report generation.
+
+These commands are optional and local. Semgrep and Trivy must be installed separately for their checks to run; unavailable scanners are reported rather than treated as a successful scan.
 
 ### Docker
 
@@ -229,6 +239,10 @@ bun run build && node dist/cli.mjs --version
 ```bash
 bun run verify:privacy
 ```
+
+## Documentation
+
+This README is the authoritative project entry point. The [documentation index](docs/README.md) links to setup guides, architecture notes, and project phases.
 
 ---
 
